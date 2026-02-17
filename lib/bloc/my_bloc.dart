@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
 // final String baseUrl = "https://emoticups.com/";
-final String baseUrl = "http://192.168.1.110:8000";
+final String baseUrl = "http://192.168.1.106:8000";
 
 final Dio dio = Dio(
   BaseOptions(
@@ -294,15 +294,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         await box.put("access", response.data["access"]);
         await box.put("refresh", response.data["refresh"]);
         await box.put("username", response.data["username"]);
-        print(response.data);
         String user_type = response.data["position"].toString().toUpperCase();
-        print(user_type);
-        if (user_type != "VENDOR") {
-          emit(AppError("You are not a vendor"));
-        } else {
-          await box.put("type", user_type);
-          emit(AppSuccess(response.data.toString()));
-        }
+
+        await box.put("type", user_type);
+        emit(AppSuccess(response.data.toString()));
       } else {
         emit(AppError(response.data.toString()));
       }

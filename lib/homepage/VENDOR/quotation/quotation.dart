@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vendors/bloc/my_bloc.dart';
-import 'package:vendors/homepage/quotation/create_quotation.dart';
+import 'package:vendors/homepage/VENDOR/quotation/create_quotation.dart';
 
 class QuotationPage extends StatefulWidget {
   const QuotationPage({super.key});
@@ -107,7 +107,16 @@ class _QuotationPageState extends State<QuotationPage> {
 
                           const SizedBox(height: 8),
                           CupertinoButton(
-                            child: Text("Download"),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.download),
+                                const SizedBox(width: 8),
+                                Text("Download"),
+                              ],
+                            ),
                             onPressed: () async {
                               final url = "${baseUrl}${item['quotation']}";
                               final uri = Uri.parse(url);

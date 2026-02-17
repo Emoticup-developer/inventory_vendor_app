@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:vendors/bloc/my_bloc.dart';
+import 'package:vendors/homepage/ADMIN/homepage.dart';
+import 'package:vendors/homepage/MANAGER/homepage.dart';
 import 'package:vendors/setup/splash.dart';
 
 class LoginPage extends StatefulWidget {
@@ -31,16 +34,34 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
         body: BlocListener<AppBloc, AppState>(
-          listener: (BuildContext context, AppState state) {
+          listener: (BuildContext context, AppState state) async {
             if (state is AppSuccess) {
+              var user_type = await Hive.box(
+                'auth',
+              ).get("type", defaultValue: "VENDOR");
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(SnackBar(content: Text("Login Success")));
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SplashScreen()),
-              );
+              if (user_type == "VENDOR") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SplashScreen()),
+                );
+              } else if (user_type == "ADMIN") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePageAdmin(),
+                  ),
+                );
+              } else if (user_type == "MANAGER") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePageManager(),
+                  ),
+                );
+              }
             } else if (state is AppError) {
               ScaffoldMessenger.of(
                 context,
